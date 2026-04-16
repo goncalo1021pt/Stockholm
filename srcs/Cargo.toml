@@ -1,0 +1,9 @@
+[package]
+name = "stockholm"
+version = "1.0.0"
+authors = ["Gonçalo Pereira <goncalo.pereira.1021@gmail.com>"]
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+aes-gcm = "0.10"

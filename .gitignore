@@ -1,1 +1,19 @@
+# Environment
 .env
+.env.local
+
+# Rust build artifacts
+/srcs/target/
+*.rlib
+*.rmeta
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS files
+Thumbs.db

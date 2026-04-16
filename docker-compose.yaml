@@ -1,6 +1,15 @@
 services:
   stockholm:
     container_name: stockholm
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
+    user: "1000:1000"
+    environment:
+      - CARGO_TARGET_DIR=/cargo-target
+    volumes:
+      - ./srcs:/app
+      - cargo-target:/cargo-target
+
+volumes:
+  cargo-target:

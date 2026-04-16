@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source=https://github.com/rust-lang/docker-rust
 
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
+    CARGO_TARGET_DIR=/cargo-target \
     PATH=/usr/local/cargo/bin:$PATH \
     RUST_VERSION=1.94.1
 
@@ -71,7 +72,29 @@ RUN set -eux; \
     cargo --version; \
     rustc --version;
 
+# Create a non-root user to avoid permission issues with host files
+RUN useradd -m -u 1000 rustdev && \
+    mkdir -p /cargo-target && \
+    chown -R rustdev:rustdev /usr/local/cargo /usr/local/rustup /cargo-target
+
 WORKDIR /app
-COPY srcs/ /app
+
+# Make sure /app is writable by rustdev (needed for Cargo.lock creation)
+RUN chown -R rustdev:rustdev /app
+
+# Copy with correct ownership
+COPY --chown=rustdev:rustdev srcs/Cargo.toml ./
+
+# Switch to non-root user
+USER rustdev
+
+RUN mkdir -p src && \
+    echo "fn main() {}" > src/main.rs && \
+    cargo build --release 2>&1 | grep -v "warning:" || true && \
+    rm -rf src
+
+COPY --chown=rustdev:rustdev srcs/src/ ./src
+
+RUN cargo build --release
 
 CMD ["tail", "-f", "/dev/null"]
