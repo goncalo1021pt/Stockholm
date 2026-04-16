@@ -1,0 +1,6 @@
+services:
+  stockholm:
+    container_name: stockholm
+    build: 
+      context: .
+      dockerfile: Dockerfile
