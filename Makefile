@@ -17,6 +17,7 @@ compile:
 
 clean:
 	docker compose down --rmi all --volumes --remove-orphans
+	docker compose rm -f
 
 fclean: clean
 	rm -rf srcs/target

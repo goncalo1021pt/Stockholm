@@ -89,7 +89,7 @@ COPY --chown=rustdev:rustdev srcs/Cargo.toml ./
 USER rustdev
 
 RUN mkdir -p src && \
-    echo "fn main() {}" > src/main.rs && \
+    echo "fn main() {}" > src/Main.rs && \
     cargo build --release 2>&1 | grep -v "warning:" || true && \
     rm -rf src
 
